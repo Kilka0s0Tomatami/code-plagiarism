@@ -201,7 +201,7 @@ class Settings(TypedDict):
     environment: NotRequired[Path]
     language: Language
     log_level: LogLevel
-    reports: NotRequired[Path]
+    reports: NotRequired[Path | None]
     reports_extension: ReportsExtension
     show_progress: Flag
     short_output: ShortOutput

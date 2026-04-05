@@ -41,7 +41,6 @@ def read_config(file: Path, safe: bool = False) -> Config | None:
     return config
 
 
-# TODO: Handle permission denied
 def write_config(file: Path, config: Mapping[str, Any]) -> None:
     config_for_dump = dict(config)
     for key in config_for_dump:
@@ -67,16 +66,17 @@ def read_settings_conf() -> Settings:
                 loaded_settings_config[key] = DefaultSettingsConfig[key]
             continue
 
-        if key in ["environment", "reports"]:
+        if key in ["environment", "reports"] and loaded_settings_config.get(key) is not None:
             loaded_settings_config[key] = Path(loaded_settings_config[key])
 
-    return Settings(
-        **{
-            key: loaded_settings_config[key]
-            for key in Settings.__annotations__
-            if key in loaded_settings_config
-        }
-    )
+    settings_dict = {}
+    for key in Settings.__annotations__:
+        if key in loaded_settings_config and loaded_settings_config[key] is not None:
+            settings_dict[key] = loaded_settings_config[key]
+        elif key in DefaultSettingsConfig:
+            settings_dict[key] = DefaultSettingsConfig[key]
+
+    return Settings(**settings_dict)
 
 
 def write_settings_conf(settings: Settings) -> None:

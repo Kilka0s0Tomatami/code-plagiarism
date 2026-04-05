@@ -26,7 +26,14 @@ def settings_modify(parsed_args: dict[str, Any]) -> None:
         new_value = parsed_args.get(key)
         if new_value is None:
             continue
-        if isinstance(new_value, Path):
+        if key == "reports":
+            if new_value == "":
+                if "reports" in settings_config:
+                    del settings_config["reports"]
+                continue
+            else:
+                settings_config[key] = Path(new_value).resolve()
+        elif isinstance(new_value, Path):
             settings_config[key] = new_value.resolve()
         else:
             settings_config[key] = new_value
