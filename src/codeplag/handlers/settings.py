@@ -26,8 +26,10 @@ def settings_modify(parsed_args: dict[str, Any]) -> None:
         new_value = parsed_args.get(key)
         if new_value is None:
             continue
+
         if key == "reports":
-            if new_value == "":
+            str_value = str(new_value) if new_value is not None else ""
+            if str_value in ["", "."]:
                 if "reports" in settings_config:
                     del settings_config["reports"]
                 continue
