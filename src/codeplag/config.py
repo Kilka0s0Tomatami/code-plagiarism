@@ -41,6 +41,7 @@ def read_config(file: Path, safe: bool = False) -> Config | None:
     return config
 
 
+# TODO: Handle permission denied
 def write_config(file: Path, config: Mapping[str, Any]) -> None:
     config_for_dump = dict(config)
     for key in config_for_dump:
